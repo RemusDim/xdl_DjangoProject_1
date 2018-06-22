@@ -1,0 +1,135 @@
+{% extends 'admin/public/base.html' %}
+
+{% block tit %}
+<title>管理组添加</title>
+{% endblock %}
+
+{% block con %}
+
+<div class="admin-biaogelist">
+    
+    <div class="listbiaoti am-cf">
+      <ul class="am-icon-flag on"> 管理组管理</ul>
+      
+      <dl class="am-icon-home" style="float: right;"> 当前位置： 管理组管理 &gt; <a href="#">管理组添加</a></dl>
+
+      <dl>
+        <a href="{% url 'auth_group_list' %}" class="am-btn am-btn-danger am-round am-btn-xs am-icon-mail-reply"> 返回管理组列表</a>
+      </dl>
+    </div>
+    
+    <div class="fbneirong">
+      <form  class="am-form" action="{% url 'auth_group_add' %}" method="post" id="doc-vld-msg form-with-tooltip myform">
+      <fieldset>
+        <div class="am-form-group am-cf">
+          <div class="zuo">组名：</div>
+          <div class="you">
+            <input minlength="3" name="name" type="text" class="am-input-sm" id="doc-ipt-name-1" placeholder="请输入用户名（至少三个字符）" required/>
+          </div>
+        </div>
+
+        <div class="am-form-group am-cf">
+          <div class="zuo">权限：</div>
+          <div class="you">
+            <div style="float: left; text-align: center;">
+              <p>可用权限</p>
+              <select multiple="multiple" id="select1" style="width: 300px; height: 200px; border: 1px solid gray;">
+                {% for i in perms %}
+                <option value="{{ i.id }}">{{ i }}</option>
+                {% endfor %}
+              </select>
+              <p style="margin-top: 10px;"><button type="button" id="add_all">全选&nbsp;&gt;</button></p>
+            </div>
+            <div style="float: left; width: 50px; height: 200px;">
+              <ul style="margin-top: 80px; text-align: center; position: relative;right: 15px;">
+                <li style="list-style: none;"><button type="button" id="add">&gt;</button></li>
+                <br>
+                <li style="list-style: none;"><button type="button" id="remove">&lt;</button></li>
+              </ul>
+            </div>
+            <div style="float: left; text-align: center;">
+              <p>已选中权限</p>
+              <select name="prms" multiple="multiple" id="select2" style="width: 300px; height: 200px; border: 1px solid gray;">
+              </select>
+              <p style="margin-top: 10px;"><button type="button" id="remove_all">全部移除</button></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="am-form-group am-cf">
+        {% csrf_token %}
+          <div class="you" style="margin-left: 11%;">
+              <button type="submit" class="am-btn am-btn-secondary am-radius" >提交</button>
+          </div>
+        </div>
+      </fieldset>
+      </form>
+
+    </div>
+
+  
+ 
+     <div class="foods">
+      <ul>
+        版权所有@2018
+      </ul>
+      <dl>
+        <a href="" title="返回头部" class="am-icon-btn am-icon-arrow-up"></a>
+      </dl>
+    </div>
+
+</div>
+
+<script>
+
+  // 表单验证使用
+  $(function() {
+  $('#doc-vld-msg').validator({
+    onValid: function(validity) {
+      $(validity.field).closest('.am-form-group').find('.am-alert').hide();
+    },
+
+    onInValid: function(validity) {
+      var $field = $(validity.field);
+      var $group = $field.closest('.am-form-group');
+      var $alert = $group.find('.am-alert');
+      // 使用自定义的提示信息 或 插件内置的提示信息
+      var msg = $field.data('请输入正确的信息 ^_^') || this.getValidationMessage(validity);
+
+      if (!$alert.length) {
+        $alert = $('<div class="am-alert am-alert-danger"></div>').hide().
+          appendTo($group);
+      }
+
+      $alert.html(msg).show();
+    }
+  });
+});
+
+// 多选框使用
+$('#add').click(function(){
+  $('#select1 option:selected').appendTo('#select2');
+})
+$('#remove').click(function(){
+  $('#select2 option:selected').appendTo('#select1');
+})
+$('#add_all').click(function(){
+  $('#select1 option').appendTo('#select2');
+})
+$('#remove_all').click(function(){
+  $('#select2 option').appendTo('#select1');
+})
+$('#select1').dblclick(function(event) {
+  /* Act on the event */
+  $('option:selected', this).appendTo('#select2')
+});
+$('#select2').dblclick(function(event) {
+  /* Act on the event */
+  $('option:selected', this).appendTo('#select1')
+});
+$('form').submit(function(){
+  $('#select2 option').prop('selected', true)
+})
+</script>
+
+{% endblock %}

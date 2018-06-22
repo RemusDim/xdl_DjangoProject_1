@@ -1,0 +1,166 @@
+{% extends 'admin/public/base.html' %}
+
+{% block tit %}
+<title>订单列表</title>
+{% endblock %}
+
+{% block con %}
+
+<div class="admin-biaogelist">
+  
+    <div class="listbiaoti am-cf">
+      <ul class="am-icon-users"> 订单管理</ul>
+      
+      <dl class="am-icon-home" style="float: right;">当前位置：订单管理 &gt; <a href="#">订单列表</a></dl>
+
+      <!--这里打开的是新页面-->
+      
+    </div>
+
+    <div class="am-btn-toolbars am-btn-toolbar am-kg am-cf">
+      <form action="{% url 'admin_order_list' %}" method="get">
+        <ul style="position: relative; left: 12px">
+
+<!--           <li>
+            <div class="am-btn-group am-btn-group-xs">
+              <div class="am-selected am-dropdown" id="am-selected-zl004" data-am-dropdown="">
+                <select name="gdsort" data-am-selected="{btnWidth: '100', btnSize: 'sm', btnStyle: 'default'}">
+                  <option {% if request.GET.gdsort == 'up' %} selected {% endif %} value="up">默认（升序）</option>
+                  <option {% if request.GET.gdsort == 'down' %} selected {% endif %} value="down">降序</option>
+                </select>
+              </div>
+            </div>
+          </li>
+
+          <li style="margin-left: 10px;">
+            <div class="am-btn-group am-btn-group-xs">
+              <div class="am-selected am-dropdown" id="am-selected-zl004" data-am-dropdown="">
+                <select name="gdsort_item" data-am-selected="{btnWidth: '100', btnSize: 'sm', btnStyle: 'default'}">
+                  <option {% if request.GET.gdsort_item == 'id' %} selected {% endif %} value="id">默认（按照ID排序）</option>
+                  <option {% if request.GET.gdsort_item == 'price' %} selected {% endif %} value="price">价格&nbsp;</option>
+                  <option {% if request.GET.gdsort_item == 'storage' %} selected {% endif %} value="storage">库存&nbsp;</option>
+                  <option {% if request.GET.gdsort_item == 'clicknum' %} selected {% endif %} value="clicknum">点击数&nbsp;</option>
+                  <option {% if request.GET.gdsort_item == 'num' %} selected {% endif %} value="num">购买数&nbsp;</option>
+                  <option {% if request.GET.gdsort_item == 'addtime' %} selected {% endif %} value="addtime">添加时间&nbsp;</option>
+                </select>
+              </div>
+            </div>
+          </li> -->
+
+          <li style="margin-left: 10px;">
+            <div class="am-btn-group am-btn-group-xs">
+              <div class="am-selected am-dropdown" id="am-selected-zl004" data-am-dropdown="">
+                <select name="sousel" data-am-selected="{btnWidth: 90, btnSize: 'sm', btnStyle: 'default'}">
+                  <option {% if request.GET.sousel == 'all' %} selected {% endif %} value="all">全部分类</option>
+                  <option {% if request.GET.sousel == 'username' %} selected {% endif %} value="username">用户名</option>
+                </select>
+              </div>
+            </div>
+          </li>
+          <li><input value="{{ request.GET.souinp }}" name="souinp" type="text" class="am-form-field am-input-sm am-input-xm" placeholder="关键词搜索"></li>
+          <li><button class="am-btn am-radius am-btn-xs am-btn-success" style="margin-top: -1px;">搜索</button></li>
+
+        </ul>
+      </form>
+    </div>
+
+    <form class="am-form am-g">
+          <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped">
+            <thead>
+              <tr class="am-success">
+                <!-- <th class="table-check"><input type="checkbox"></th> -->
+
+                <th class="table-title">订单号</th>
+                <th class="table-title">用户</th>
+                <th class="table-title">总价格</th>
+                <th class="table-title">商品总数</th>
+                <th class="table-title">下单时间</th>
+                <th class="table-title">状态</th>
+                <th class="table-title">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in oinfo %}
+              <tr style="font-size: 14px;">
+                <td style=" line-height: 80px;">123456789-{{ i.id }}</td>
+
+                {% if i.uid.username %}
+                <td style=" line-height: 80px;">{{ i.uid.username }}</td>
+                {% elif i.uid.email %}
+                <td style=" line-height: 80px;">{{ i.uid.email }}</td>
+                {% elif i.uid.phone %}
+                <td style=" line-height: 80px;">{{ i.uid.phone }}</td>
+                {% endif %}
+
+                <td style=" line-height: 80px;">{{ i.totalprice }}</td>
+                <td style=" line-height: 80px;">{{ i.totalnum }}</td>
+                <td style=" line-height: 80px;">{{ i.addtime }}</td>
+                <td style=" line-height: 80px;">
+                  <select oid="{{ i.id }}" name="status" class="mysel" style="display: inline-block; height: 30px; width: 100px; font-size: 12px">
+                    <option value="1" {% if i.status == 1 %} selected {% endif %} >未付款</option>
+                    <option value="2" {% if i.status == 2 %} selected {% endif %} >待发货</option>
+                    <option value="3" {% if i.status == 3 %} selected {% endif %} >待收货</option>
+                    <option value="4" {% if i.status == 4 %} selected {% endif %} >已完成</option>
+                    <option value="5" {% if i.status == 5 %} selected {% endif %} >已取消</option>
+                  </select>
+                </td>
+                <td style=" line-height: 60px;">
+                  <div class="am-btn-toolbar" style="margin-top: 30px">
+                    <div class="am-btn-group am-btn-group-xs">
+                      <a href="{% url 'admin_order_listdetail' i.id %}" class="am-btn am-btn-default am-btn-xs am-text-success am-round"><span class="am-icon-file-text-o" title="查看订单详情"></span> </a>
+                      <!-- <button class="am-btn am-btn-default am-btn-xs am-text-secondary am-round" data-am-modal="{target: '#my-popups'}" title="修改订单"><span class="am-icon-pencil-square-o"></span></button> -->
+                      <a disabled gid='{{ i.id }}' href="" class="mydel am-btn am-btn-default am-btn-xs am-text-danger am-round" title="删除订单"><span class="am-icon-trash-o"></span></a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          
+          <ul class="am-pagination am-fr">
+
+          {% load pagetag %}
+
+          {% showpage request oinfo.paginator.num_pages %}
+
+          </ul>
+
+          <ul class="am-pagination am-fl">
+            ---第{{ p }}页---总共{{ num }}页---
+          </ul>
+    </form>
+ 
+  <div class="foods">
+    <ul>
+      版权所有@2018
+    </ul>
+    <dl>
+      <a href="" title="返回头部" class="am-icon-btn am-icon-arrow-up"></a>
+    </dl>
+  </div>
+</div>
+
+<script>
+  // 选择ajax
+  $('.mysel').change(function(){
+    var s = $(this).val()
+    var oid = $(this).attr('oid')
+    $.get('{% url "admin_order_state" %}', {s: s, oid: oid})
+  });
+
+  // 删除ajax
+  $('.mydel').click(function(){
+    var $href = $(this).attr('href')
+    var gid = $(this).attr('gid')
+    var $tr = $(this).parents('tr')
+    $.get($href, {gid, gid}, function(data){
+      $tr.remove()
+    });
+
+    return false
+  });
+  
+</script>
+
+{% endblock %}

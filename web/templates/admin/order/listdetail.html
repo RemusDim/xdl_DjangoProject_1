@@ -1,0 +1,130 @@
+{% extends 'admin/public/base.html' %}
+
+{% block tit %}
+<title>订单详情列表</title>
+{% endblock %}
+
+{% block con %}
+
+<div class="admin-biaogelist">
+  
+    <div class="listbiaoti am-cf">
+      <ul class="am-icon-users"> 订单详情</ul>
+      
+      <dl class="am-icon-home" style="float: right;">当前位置：订单管理 &gt; <a href="#">订单详情</a></dl>
+
+      <!--这里打开的是新页面-->
+      
+      <dl>
+        <a href="{% url 'admin_order_list' %}" class="am-btn am-btn-danger am-round am-btn-xs am-icon-paper-plane"> 返回订单列表页</a>
+      </dl>
+    </div>
+
+
+    <form class="am-form am-g">
+      <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped">
+        <div>
+          <tr class="am-success">
+            <th class="table-title">用户</th>
+            <th class="table-title">订单号</th>
+            <th class="table-title">总数</th>
+            <th class="table-title">总价</th>
+            <th class="table-title">下单时间</th>
+            <th class="table-title">状态</th>
+          </tr>
+        </div>
+        <tbody>
+          <tr style="font-size: 14px;">
+            {% if oinfo.0.orderid.uid.username %}
+            <td style=" line-height: 80px;">{{ oinfo.0.orderid.uid.username }}</td>
+            {% elif oinfo.0.orderid.uid.email %}
+            <td style=" line-height: 80px;">{{ oinfo.0.orderid.uid.email }}</td>
+            {% elif oinfo.0.orderid.uid.phone %}
+            <td style=" line-height: 80px;">{{ oinfo.0.orderid.uid.phone }}</td>
+            {% endif %}
+
+            <td style=" line-height: 80px;">1234567890-{{ oinfo.0.orderid.id }}</td>
+            <td style=" line-height: 80px;">{{ oinfo.0.orderid.totalnum }}</td>
+            <td style=" line-height: 80px;">{{ oinfo.0.orderid.totalprice }}</td>
+            <td style=" line-height: 80px;">{{ oinfo.0.orderid.addtime }}</td>
+            <td style=" line-height: 80px;">
+              {% if oinfo.0.orderid.status == 1 %} 未付款
+              {% elif oinfo.0.orderid.status == 2 %} 待发货
+              {% elif oinfo.0.orderid.status == 3 %} 待收货
+              {% elif oinfo.0.orderid.status == 4 %} 已完成
+              {% elif oinfo.0.orderid.status == 5 %} 已取消
+              {% endif %}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+
+    <form class="am-form am-g">
+          <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped">
+            <div>
+              <tr class="am-success">
+                <!-- <th class="table-check"><input type="checkbox"></th> -->
+
+                <th class="table-title">商品</th>
+                <th class="table-title">商品图片</th>
+                <th class="table-title">数量</th>
+                <th class="table-title">价格</th>
+              </tr>
+            </div>
+            <tbody>
+              {% for i in oinfo %}
+              <tr style="font-size: 14px;">
+                <td style=" line-height: 80px;">{{ i.gid.title }}</td>
+                <td style=" line-height: 80px;"><img style="height: 60px" src="{{ i.gid.picurl }}" alt="^_^"></td>
+                <td style=" line-height: 80px;">{{ i.num }}</td>
+                <td style=" line-height: 80px;">{{ i.price }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          
+          <ul class="am-pagination am-fr">
+
+          
+
+          </ul>
+
+          <ul class="am-pagination am-fl">
+            ---第{{ p }}页---总共{{ num }}页---
+          </ul>
+    </form>
+ 
+  <div class="foods">
+    <ul>
+      版权所有@2018
+    </ul>
+    <dl>
+      <a href="" title="返回头部" class="am-icon-btn am-icon-arrow-up"></a>
+    </dl>
+  </div>
+</div>
+
+<script>
+  // 选择ajax
+  $('.mysel').change(function(){
+    var s = $(this).val()
+    var oid = $(this).attr('oid')
+    $.get('{% url "admin_order_state" %}', {s: s, oid: oid})
+  });
+
+  // 删除ajax
+  $('.mydel').click(function(){
+    var $href = $(this).attr('href')
+    var gid = $(this).attr('gid')
+    var $tr = $(this).parents('tr')
+    $.get($href, {gid, gid}, function(data){
+      $tr.remove()
+    });
+
+    return false
+  });
+  
+</script>
+
+{% endblock %}

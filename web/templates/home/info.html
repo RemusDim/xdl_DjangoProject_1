@@ -1,0 +1,363 @@
+{% extends 'home/public/base.html' %}
+
+{% block title %}
+<title>详情页面</title>
+{% endblock %}
+
+{% block link %}
+<link href="/static/home/AmazeUI-2.4.2/assets/css/admin.css" rel="stylesheet" type="text/css" />
+<link href="/static/home/AmazeUI-2.4.2/assets/css/amazeui.css" rel="stylesheet" type="text/css" />
+<link href="/static/home/basic/css/demo.css" rel="stylesheet" type="text/css" />
+<link type="text/css" href="/static/home/css/optstyle.css" rel="stylesheet" />
+<link type="text/css" href="/static/home/css/style.css" rel="stylesheet" />
+
+<script type="text/javascript" src="/static/home/basic/js/jquery-1.7.min.js"></script>
+<script type="text/javascript" src="/static/home/basic/js/quick_links.js"></script>
+
+<script type="text/javascript" src="/static/home/AmazeUI-2.4.2/assets/js/amazeui.js"></script>
+<script type="text/javascript" src="/static/home/js/jquery.imagezoom.min.js"></script>
+<script type="text/javascript" src="/static/home/js/jquery.flexslider.js"></script>
+<script type="text/javascript" src="/static/home/js/list.js"></script>
+{% endblock %}
+
+{% block con %}
+
+<div class="listMain">
+
+            <!--分类-->
+            <div class="nav-table">
+               <div class="long-title"><a href="{% url 'index' %}" class="all-goods">商城首页</a></div>
+               <div class="nav-cont">
+                    <ul>
+                        {% for i in typedata %}
+                        <li class="qc"><a href="{% url 'list' i.id %}">{{ i.typename }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+                <ol class="am-breadcrumb am-breadcrumb-slash">
+                    <li><a href="{% url 'index' %}">首页</a></li>
+                    {% for i in mylist %}
+                    <li><a href="{% url 'list' i.id %}">{{ i.typename }}</a></li>
+                    {% endfor %}
+                </ol>
+                <script type="text/javascript">
+                    $(function() {});
+                    $(window).load(function() {
+                        $('.flexslider').flexslider({
+                            animation: "slide",
+                            start: function(slider) {
+                                $('body').removeClass('loading');
+                            }
+                        });
+                    });
+                </script>
+                <div class="scoll">
+                    <section class="slider">
+                        <div class="flexslider" style="">
+                            
+                        <div class="flex-viewport" style="overflow: hidden; position: relative;">
+                            <ul class="slides" style="width: 1000%; transition-duration: 0s; transform: translate3d(0px, 0px, 0px);">
+                                <li class="clone" aria-hidden="true" style="width: 0px; float: left; display: block;">
+                                    <img src="/static/home/images/03.jpg" draggable="false">
+                                </li>
+                                <li style="width: 0px; float: left; display: block;" class="flex-active-slide">
+                                    <img src="/static/home/images/01.jpg" title="pic" draggable="false">
+                                </li>
+                                <li style="width: 0px; float: left; display: block;">
+                                    <img src="/static/home/images/02.jpg" draggable="false">
+                                </li>
+                                <li style="width: 0px; float: left; display: block;">
+                                    <img src="/static/home/images/03.jpg" draggable="false">
+                                </li>
+                                <li style="width: 0px; float: left; display: block;" class="clone" aria-hidden="true">
+                                    <img src="/static/home/images/01.jpg" title="pic" draggable="false">
+                                </li>
+                            </ul>
+                        </div>
+                        <ol class="flex-control-nav flex-control-paging">
+                            <li>
+                                <a class="flex-active">1</a>
+                            </li>
+                            <li>
+                                <a>2</a>
+                            </li>
+                            <li>
+                                <a>3</a>
+                            </li>
+                        </ol>
+                        <ul class="flex-direction-nav">
+                            <li class="flex-nav-prev">
+                                <a class="flex-prev" href="#">Previous</a>
+                            </li>
+                            <li class="flex-nav-next">
+                                <a class="flex-next" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </div>
+                    </section>
+                </div>
+
+                <!--放大镜-->
+
+                <div class="item-inform">
+                    <div class="clearfixLeft" id="clearcontent">
+
+                        <div class="box">
+                            <script type="text/javascript">
+                                $(document).ready(function() {
+                                    $(".jqzoom").imagezoom();
+                                    $("#thumblist li a").click(function() {
+                                        $(this).parents("li").addClass("tb-selected").siblings().removeClass("tb-selected");
+                                        $(".jqzoom").attr('src', $(this).find("img").attr("mid"));
+                                        $(".jqzoom").attr('rel', $(this).find("img").attr("big"));
+                                    });
+                                });
+                            </script>
+
+                            <div class="tb-booth tb-pic tb-s310">
+                                <a href="/static/home/images/01.jpg">
+                                    <img src="{{ ob.picurl }}" alt="" rel="{{ ob.picurl }}" class="jqzoom" style="cursor: crosshair;">
+                                </a>
+                            </div>
+                            <ul class="tb-thumb" id="thumblist">
+                                <!-- <li class="tb-selected">
+                                    <div class="tb-pic tb-s40">
+                                        <a href="#"><img style="height: 20px" src="{{ ob.picurl }}" mid="{{ ob.picurl }}" big="{{ ob.picurl }}"></a>
+                                    </div>
+                                </li> -->
+                                <!-- <li>
+                                    <div class="tb-pic tb-s40">
+                                        <a href="#"><img src="/static/home/images/02_small.jpg" mid="/static/home/images/02_mid.jpg" big="/static/home/images/02.jpg"></a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="tb-pic tb-s40">
+                                        <a href="#"><img src="/static/home/images/03_small.jpg" mid="/static/home/images/03_mid.jpg" big="/static/home/images/03.jpg"></a>
+                                    </div>
+                                </li> -->
+                            </ul>
+                        </div>
+
+                        <div class="clear"></div>
+                    </div>
+
+                    <div class="clearfixRight">
+
+                        <!--规格属性-->
+                        <!--名称-->
+                        <div class="tb-detail-hd">
+                            <h1>    
+                                {{ ob.title }}
+                            </h1>
+                        </div>
+                        <div class="tb-detail-list">
+                            <!--价格-->
+                            <div class="tb-detail-price">
+                                <li class="price iteminfo_price">
+                                    <dt>价格</dt>
+                                    <dd><em>¥</em><b class="sys_item_price">{{ ob.price }}</b>  </dd>                                 
+                                </li>
+                                <div class="clear"></div>
+                            </div>
+
+                            <!--各种规格-->
+                            <dl class="iteminfo_parameter sys_item_specpara">
+                                <dt class="theme-login"><div class="cart-title">可选规格<span class="am-icon-angle-right"></span></div></dt>
+                                <dd>
+                                    <!--操作页面-->
+
+                                    <div class="theme-popover-mask"></div>
+
+                                    <div class="theme-popover">
+                                        <div class="theme-span"></div>
+                                        <div class="theme-poptit">
+                                            <a href="javascript:;" title="关闭" class="close">×</a>
+                                        </div>
+                                        <div class="theme-popbod dform">
+                                            <form class="theme-signin" name="loginform" action="" method="post">
+
+                                                <div class="theme-signin-left">
+                                                    <div class="theme-options">
+                                                        <div class="cart-title number">数量</div>
+                                                        <dd>
+                                                            <input id="min" class="am-btn am-btn-default" name="" type="button" value="-" disabled="disabled">
+                                                            <input id="text_box" name="" type="text" value="1" style="width:30px;">
+                                                            <input id="add" class="am-btn am-btn-default" name="" type="button" value="+">
+                                                            <span id="Stock" class="tb-hidden">库存<span class="stock">{{ ob.num }}</span>件</span>
+                                                        </dd>
+                                                    </div>
+                                                    <div class="clear"></div>
+
+                                                    <div class="btn-op">
+                                                        <div class="btn am-btn am-btn-warning">确认</div>
+                                                        <div class="btn close am-btn am-btn-warning">取消</div>
+                                                    </div>
+                                                </div>
+                                                <div class="theme-signin-right">
+                                                    <div class="img-info">
+                                                        <img src="/static/home/images/songzi.jpg">
+                                                    </div>
+                                                    <div class="text-info">
+                                                        <span class="J_Price price-now">¥39.00</span>
+                                                        <span id="Stock" class="tb-hidden">库存<span class="stock">1000</span>件</span>
+                                                    </div>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                </dd>
+                            </dl>
+                            <div class="clear"></div>
+                            <!--活动  -->
+                            <div class="shopPromotion gold">
+                                <div class="hot">
+                                    <dt class="tb-metatit">店铺优惠</dt>
+                                    <div class="gold-list">
+                                        <p>xxxxxx<span>点击领券<i class="am-icon-sort-down"></i></span></p>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <div class="coupon">
+                                    <dt class="tb-metatit">优惠券</dt>
+                                    <div class="gold-list">
+                                        <ul>
+                                            <li>125减5</li>
+                                            <li>198减10</li>
+                                            <li>298减20</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pay">
+                            <div class="pay-opt">
+                            <a href="{% url 'index' %}"><span class="am-icon-home am-icon-fw">首页</span></a>
+                            <a><span class="am-icon-heart am-icon-fw">收藏</span></a>
+                            
+                            </div>
+                            <li>
+                                <div class="clearfix tb-btn tb-btn-buy theme-login">
+                                    <a id="LikBuy" title="点此按钮到下一步确认购买信息" href="#">立即购买</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="clearfix tb-btn tb-btn-basket theme-login">
+                                    <a gid="{{ ob.id }}" id="LikBasket" title="加入购物车" href="#"><i></i>加入购物车</a>
+                                </div>
+                            </li>
+                        </div>
+
+                    </div>
+
+                    <div class="clear"></div>
+
+                </div>
+                <div style="height: 50px"></div>
+                
+                            
+                <!-- introduce-->
+
+                <div class="introduce">
+                    <div class="browse">
+
+                        <!-- 详情侧面的推荐 -->
+                        <div class="mc"> 
+                             <ul>                       
+                                <div class="mt">            
+                                    <h2>看了又看</h2>        
+                                </div>
+                                    <li class="first">
+                                        <div class="p-img">                    
+                                            <a href="#"> <img class="" src="{{ ob.picurl }}"> </a>               
+                                        </div>
+                                        <div class="p-name">
+                                            <a href="#">
+                                                xxxx
+                                            </a>
+                                        </div>
+                                        <div class="p-price"><strong>￥xxx</strong></div>
+                                    </li>
+                             </ul>                  
+                        </div>
+                    </div>
+                    <div class="introduceMain">
+                        <div class="am-tabs" data-am-tabs="">
+                            <ul class="am-avg-sm-3 am-tabs-nav am-nav am-nav-tabs" otop="996.78125" style="position: static; top: 0px; z-index: 998;">
+                                <li class="am-active">
+                                    <a href="#">
+
+                                        <span class="index-needs-dt-txt">宝贝详情</span></a>
+
+                                </li>
+
+                                <li>
+                                    <a href="#">
+
+                                        <span class="index-needs-dt-txt">全部评价</span></a>
+
+                                </li>
+
+                                <li>
+                                    <a href="#">
+
+                                        <span class="index-needs-dt-txt">猜你喜欢</span></a>
+                                </li>
+                            </ul>
+
+                            <div class="am-tabs-bd" style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+
+                                <div class="am-tab-panel am-fade am-in am-active" style="height: 200px;">
+                                    {{ ob.info|safe }}
+                                </div>
+
+                                <div style="height: 200px" class="am-tab-panel am-fade"></div>
+                                <div style="height: 200px" class="am-tab-panel am-fade"></div>
+                            </div>
+                        </div>
+
+                        <div class="clear"></div>
+
+                        <div class="footer">
+                            <div class="footer-hd">
+                                <p>
+                                    <a href="#">恒望科技</a>
+                                    <b>|</b>
+                                    <a href="#">商城首页</a>
+                                    <b>|</b>
+                                    <a href="#">支付宝</a>
+                                    <b>|</b>
+                                    <a href="#">物流</a>
+                                </p>
+                            </div>
+                            <div class="footer-bd">
+                                <p>
+                                    <a href="#">关于恒望</a>
+                                    <a href="#">合作伙伴</a>
+                                    <a href="#">联系我们</a>
+                                    <a href="#">网站地图</a>
+                                    <em>© 2015-2025 Hengwang.com 版权所有</em>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+<script>
+    $('#LikBasket').click(function(){
+        var $gid = $(this).attr('gid');
+        var $num = $('#text_box').val();
+        $.get('{% url "shopperadd" %}', {gid: $gid, num: $num}, function(data){
+            alert(data['msg'])
+            $('#J_MiniCartNum').text(data['mynum'])
+            $('#myshoppernum').text(data['mynum'])
+        }, 'json')
+    });
+</script>
+
+{% endblock %}

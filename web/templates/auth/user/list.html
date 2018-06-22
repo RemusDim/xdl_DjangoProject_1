@@ -1,0 +1,141 @@
+{% extends 'admin/public/base.html' %}
+
+{% block tit %}
+<title>管理员列表</title>
+{% endblock %}
+
+{% block con %}
+
+<div class="admin-biaogelist">
+  
+    <div class="listbiaoti am-cf">
+      <ul class="am-icon-users"> 管理员管理</ul>
+      
+      <dl class="am-icon-home" style="float: right;">当前位置：管理员管理 &gt; <a href="#">管理员列表</a></dl>
+      
+      <dl>
+        <a href="{% url 'auth_user_add' %}" class="am-btn am-btn-danger am-round am-btn-xs am-icon-plus"> 手动添加管理员</a>
+      </dl>
+      <!--这里打开的是新页面-->
+      
+    </div>
+
+    <div class="am-btn-toolbars am-btn-toolbar am-kg am-cf">
+      <form action="{% url 'admin_user_list' %}" method="get">
+        <ul style="position: relative; left: 12px">
+          <li style="margin-left: -10px;">
+            <div class="am-btn-group am-btn-group-xs">
+              <div class="am-selected am-dropdown" id="am-selected-zl004" data-am-dropdown="">
+                <select name="sousel" data-am-selected="{btnWidth: 90, btnSize: 'sm', btnStyle: 'default'}">
+                  <option {% if request.GET.sousel == 'all' %} selected {% endif %} value="all">全部分类</option>
+                  <option {% if request.GET.sousel == 'username' %} selected {% endif %} value="username">姓名</option>
+                  <option {% if request.GET.sousel == 'age' %} selected {% endif %} value="age">年龄</option>
+                  <option {% if request.GET.sousel == 'sex' %} selected {% endif %} value="sex">性别</option>
+                  <option {% if request.GET.sousel == 'phone' %} selected {% endif %} value="phone">手机</option>
+                  <option {% if request.GET.sousel == 'email' %} selected {% endif %} value="email">邮箱</option>
+                  <option {% if request.GET.sousel == 'addtime' %} selected {% endif %} value="addtime">添加时间</option>
+                  <option {% if request.GET.sousel == 'status' %} selected {% endif %} value="status">状态</option>
+                </select>
+              </div>
+            </div>
+          </li>
+          <li><input value="{{ request.GET.souinp }}" name="souinp" type="text" class="am-form-field am-input-sm am-input-xm" placeholder="关键词搜索"></li>
+          <li><button class="am-btn am-radius am-btn-xs am-btn-success" style="margin-top: -1px;">搜索</button></li>
+        </ul>
+      </form>
+    </div>
+
+    <form class="am-form am-g">
+          <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped">
+            <thead>
+              <tr class="am-success">
+                <!-- <th class="table-check"><input type="checkbox"></th> -->
+
+                <th class="table-title">ID</th>
+                <th class="table-title">用户名</th>
+                <th class="table-title">邮箱</th>
+                <th class="table-title">级别</th>
+                <!-- <th class="table-title">所属组</th> -->
+                <th class="table-title">注册时间</th>
+                <th class="table-title">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in ulist %}
+              <tr style="font-size: 14px;">
+                <!-- <td><input type="checkbox"></td> -->
+                <td style=" line-height: 60px;">{{ i.id }}</td>
+                <td style=" line-height: 60px;">{{ i.username }}</td>
+                <td style=" line-height: 60px;">{{ i.email }}</td>
+                <td style=" line-height: 60px;">
+                  {% if i.is_superuser == 1 %}
+                    <span style="font-weight: bold;">超级管理员</span>
+                  {% else %}
+                    普通管理员
+                  {% endif %}
+                </td>
+                <!-- <td style=" line-height: 60px;">
+                  &nbsp;
+                </td> -->
+                <td style=" line-height: 60px;">{{ i.date_joined }}</td>
+                <td style=" line-height: 60px;">
+                  <div class="am-btn-toolbar" style="margin-top: 20px">
+                    <div class="am-btn-group am-btn-group-xs">
+                      <a href="" class="am-btn am-btn-default am-btn-xs am-text-success am-round"><span class="am-icon-pencil-square-o" title="修改"></span> </a>
+                      <!-- <button class="am-btn am-btn-default am-btn-xs am-text-secondary am-round" data-am-modal="{target: '#my-popups'}" title="修改订单"><span class="am-icon-pencil-square-o"></span></button> -->
+                      <a uid="{{ i.id }}" class="mydel am-btn am-btn-default am-btn-xs am-text-danger am-round" title="删除"><span class="am-icon-trash-o"></span></a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          
+          <ul class="am-pagination am-fr">
+
+            
+
+          </ul>
+
+          <ul class="am-pagination am-fl">
+            ---第{{ p }}页---总共{{ num }}页---
+          </ul>
+    </form>
+ 
+  <div class="foods">
+    <ul>
+      版权所有@2018
+    </ul>
+    <dl>
+      <a href="" title="返回头部" class="am-icon-btn am-icon-arrow-up"></a>
+    </dl>
+  </div>
+</div>
+
+<script>
+  // 选择ajax
+  $('.mysel').change(function(){
+    var v = $(this).val()
+    var sid = $(this).attr('sid')
+    $.get('{% url "admin_user_state" %}', {v: v, sid: sid})
+  });
+
+  // 删除ajax
+  $('.mydel').click(function(){
+    var id = $(this).attr('uid')
+    var $this = $(this).parents('tr')
+    $.get("{% url 'auth_user_del'%}", {id: id}, function(data){
+      if(data['code']=='1'){
+        alert(data['msg'])
+        $this.remove()
+      }else{
+        alert(data['msg'])
+      }
+    }, 'json')
+    return false
+  })
+  
+</script>
+
+{% endblock %}

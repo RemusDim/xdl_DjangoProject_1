@@ -1,0 +1,118 @@
+{% extends 'admin/public/base.html' %}
+
+{% block tit %}
+<title>已删除会员</title>
+{% endblock %}
+
+{% block con %}
+
+<div class="admin-biaogelist">
+  
+    <div class="listbiaoti am-cf">
+      <ul class="am-icon-users"> 会员管理</ul>
+      
+      <dl class="am-icon-home" style="float: right;">当前位置： 会员管理 &gt; <a href="#">已删除会员列表</a></dl>
+      
+      <dl>
+        <a href="{% url 'admin_user_add' %}" class="am-btn am-btn-danger am-round am-btn-xs am-icon-plus"> 手动添加会员</a>
+      </dl>
+      <!--这里打开的是新页面-->
+      
+    </div>
+
+    <form class="am-form am-g">
+          <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped">
+            <thead>
+              <tr class="am-success">
+                <!-- <th class="table-check"><input type="checkbox"></th> -->
+
+                <th class="table-title">头像</th>
+                <th class="table-title">姓名</th>
+                <th class="table-title">年龄</th>
+                <th class="table-title">性别</th>
+                <th class="table-title">手机</th>
+                <th class="table-title">邮箱</th>
+                <th class="table-title">添加时间</th>
+                <th class="table-title">状态</th>
+                <th class="table-title">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in uinfo %}
+              <tr style="font-size: 14px;">
+                <!-- <td><input type="checkbox"></td> -->
+                <td class="table-title"><img height="60px" src="{{ i.picurl }}" alt="^_^"></td>
+                <td class="table-title" style=" line-height: 60px;">{{ i.username }}</td>
+                <td style=" line-height: 60px;">{{ i.age }}</td>
+                <td style=" line-height: 60px;">{{ i.sex }}</td>
+                <td style=" line-height: 60px;">{{ i.phone }}</td>
+                <td style=" line-height: 60px;">{{ i.email }}</td>
+                <td style=" line-height: 60px;">{{ i.addtime }}</td>
+                <td style=" line-height: 60px;">
+                  <select sid="{{ i.id }}" name="status" class="mysel" style="display: inline-block; height: 30px; width: 100px; font-size: 12px">
+                    <option value="0" {% if i.status == 0 %} selected {% endif %} >管理员</option>
+                    <option value="1" {% if i.status == 1 %} selected {% endif %} >正常</option>
+                    <option value="2" {% if i.status == 2 %} selected {% endif %} >禁用</option>
+                    <option value="3" {% if i.status == 3 %} selected {% endif %} >已删除</option>
+                  </select>
+                </td>
+                <td style=" line-height: 60px;">
+                  <div class="am-btn-toolbar" style="margin-top: 20px">
+                    <div class="am-btn-group am-btn-group-xs">
+                      <a href="{% url 'admin_user_edited' i.id %}" class="am-btn am-btn-default am-btn-xs am-text-success am-round"><span class="am-icon-pencil-square-o" title="修改"></span> </a>
+                      <a sid="{{ i.id }}" class="am-btn am-btn-default am-btn-xs am-text-danger am-round delbutton" title="删除"><span class="am-icon-trash-o"></span></a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          
+          <!-- <ul class="am-pagination am-fr">
+            <li class="am-disabled"><a href="#">«</a></li>
+            <li class="am-active"><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#">»</a></li>
+          </ul> -->
+        </form>
+ 
+  <div class="foods">
+    <ul>
+      版权所有@2018
+    </ul>
+    <dl>
+      <a href="" title="返回头部" class="am-icon-btn am-icon-arrow-up"></a>
+    </dl>
+  </div>
+</div>
+
+<script>
+  var sign = 0
+  // 更改状态
+  $('.mysel').change(function(){
+    var v = $(this).val()
+    var sid = $(this).attr('sid')
+    $.get('{% url "admin_user_state" %}', {v: v, sid: sid}, function(data){
+      location.href="{% url "admin_user_listed" %}"
+    })
+  });
+  // 删除按键
+  $('.delbutton').click((function(event) {
+    var sid = $(this).attr('sid')
+    /* Act on the event */
+    if(sign==0){
+      alert('删除之后无法恢复，请谨慎操作')
+      sign++
+      return
+    }
+    $.get('{% url "admin_user_deled" %}', {sid: sid}, function(data){
+      location.href="{% url "admin_user_listed" %}"
+    })
+    }));
+</script>
+
+{% endblock %}

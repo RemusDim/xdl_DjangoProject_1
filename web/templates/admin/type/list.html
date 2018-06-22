@@ -1,0 +1,118 @@
+{% extends 'admin/public/base.html' %}
+
+{% block tit %}
+<title>会员列表</title>
+{% endblock %}
+
+{% block con %}
+
+<div class="admin-biaogelist">
+  
+    <div class="listbiaoti am-cf">
+      <ul class="am-icon-users"> 商品分类管理</ul>
+      
+      <dl class="am-icon-home" style="float: right;">当前位置：商品分类管理 &gt; <a href="#">商品分类列表</a></dl>
+      
+      <dl>
+        <a href="{% url 'admin_type_add' %}" class="am-btn am-btn-danger am-round am-btn-xs am-icon-plus"> 手动添加商品分类</a>
+      </dl>
+      <!--这里打开的是新页面-->
+      
+    </div>
+
+    <div class="am-btn-toolbars am-btn-toolbar am-kg am-cf">
+      <form action="{% url 'admin_type_list' %}" method="get">
+        <ul style="position: relative; left: 12px">
+          <li style="margin-left: -10px;">
+            <div class="am-btn-group am-btn-group-xs">
+              <div class="am-selected am-dropdown" id="am-selected-zl004" data-am-dropdown="">
+                <select name="sousel" data-am-selected="{btnWidth: 90, btnSize: 'sm', btnStyle: 'default'}">
+                  <option {% if request.GET.sousel == 'all' %} selected {% endif %} value="all">全部分类</option>
+                  <option {% if request.GET.sousel == 'tname' %} selected {% endif %} value="tname">分类名称</option>
+                  <option {% if request.GET.sousel == 'ptname' %} selected {% endif %} value="ptname">父级分类</option>
+                </select>
+              </div>
+            </div>
+          </li>
+          <li><input value="{{ request.GET.souinp }}" name="souinp" type="text" class="am-form-field am-input-sm am-input-xm" placeholder="关键词搜索"></li>
+          <li><button class="am-btn am-radius am-btn-xs am-btn-success" style="margin-top: -1px;">搜索</button></li>
+        </ul>
+      </form>
+    </div>
+
+    <form class="am-form am-g">
+          <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped">
+            <thead>
+              <tr class="am-success">
+                <!-- <th class="table-check"><input type="checkbox"></th> -->
+
+                <th class="table-title">ID</th>
+                <th class="table-title">分类名称</th>
+                <th class="table-title">父级分类</th>
+                <th class="table-title">路径</th>
+                <th class="table-title">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in ob %}
+              <tr style="font-size: 14px;">
+                <!-- <td><input type="checkbox"></td> -->
+                <td style=" line-height: 60px;" class="table-title">{{ i.id }}</td>
+                <td class="table-title" style=" line-height: 60px;">{{ i.typename }}</td>
+                <td style=" line-height: 60px;">{{ i.pname }}</td>
+                <td style=" line-height: 60px;">{{ i.ppath }}</td>
+                <td style=" line-height: 60px;">
+                  <div class="am-btn-toolbar" style="margin-top: 20px">
+                    <div class="am-btn-group am-btn-group-xs">
+                      <a href="{% url 'admin_type_edit' i.id %}" class="am-btn am-btn-default am-btn-xs am-text-success am-round"><span class="am-icon-pencil-square-o" title="修改商品分类"></span> </a>
+                      <!-- <button class="am-btn am-btn-default am-btn-xs am-text-secondary am-round" data-am-modal="{target: '#my-popups'}" title="修改订单"><span class="am-icon-pencil-square-o"></span></button> -->
+                      <a tid="{{ i.id }}" href="{% url 'admin_type_del' %}" class="ajax_del am-btn am-btn-default am-btn-xs am-text-danger am-round" title="删除商品分类"><span class="am-icon-trash-o"></span></a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          
+          <ul class="am-pagination am-fr">
+          {% load pagetag %}
+
+          {% showpage request ob.paginator.num_pages %}
+          </ul>
+
+          <ul class="am-pagination am-fl">
+            ---第{{ p }}页---总共{{ num }}页---
+          </ul>
+    </form>
+ 
+  <div class="foods">
+    <ul>
+      版权所有@2018
+    </ul>
+    <dl>
+      <a href="" title="返回头部" class="am-icon-btn am-icon-arrow-up"></a>
+    </dl>
+  </div>
+</div>
+
+<script>
+  // 删除ajax
+  $('.ajax_del').click(function(event) {
+    /* Act on the event */
+    // 路径
+    var $href = $(this).attr('href');
+    var tid = $(this).attr('tid');
+    var $tr = $(this).parents('tr')
+    $.get($href, {tid: tid}, function(data){
+      if(data.status == 1){
+        $tr.remove()
+      }
+      alert(data.msg)
+    });
+    return false
+  });
+  
+</script>
+
+{% endblock %}

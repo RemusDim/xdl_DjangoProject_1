@@ -1,0 +1,541 @@
+{% extends 'home/person/index.html' %}
+
+{% block tit %}
+<title>订单管理</title>
+{% endblock %}
+
+{% block link %}
+<link href="/static/home/AmazeUI-2.4.2/assets/css/admin.css" rel="stylesheet" type="text/css">
+<link href="/static/home/AmazeUI-2.4.2/assets/css/amazeui.css" rel="stylesheet" type="text/css">
+
+<link href="/static/home/css/personal.css" rel="stylesheet" type="text/css">
+<link href="/static/home/css/orstyle.css" rel="stylesheet" type="text/css">
+
+<script src="/static/home/AmazeUI-2.4.2/assets/js/jquery.min.js"></script>
+<script src="/static/home/AmazeUI-2.4.2/assets/js/amazeui.js"></script>
+{% endblock %}
+
+{% block con %}
+<div class="main-wrap">
+
+	<div class="user-order">
+
+		<!--标题 -->
+		<div class="am-cf am-padding">
+			<div class="am-fl am-cf"><strong class="am-text-danger am-text-lg">订单管理</strong> / <small>Order</small></div>
+		</div>
+		<hr/>
+
+		<div class="am-tabs am-tabs-d2 am-margin" data-am-tabs>
+
+			<ul class="am-avg-sm-5 am-tabs-nav am-nav am-nav-tabs">
+				<li class="am-active"><a href="#tab1">所有订单</a></li>
+				<li><a href="#tab2">待付款</a></li>
+				<li><a href="#tab3">待发货</a></li>
+				<li><a href="#tab4">待收货</a></li>
+				<li><a href="#tab5">待评价</a></li>
+			</ul>
+
+			<div class="am-tabs-bd">
+				<div class="am-tab-panel am-fade am-in am-active" id="tab1">
+					<div class="order-top">
+						<div class="th th-item">
+							<td class="td-inner">商品</td>
+						</div>
+						<div class="th th-price">
+							<td class="td-inner">单价</td>
+						</div>
+						<div class="th th-number">
+							<td class="td-inner">数量</td>
+						</div>
+						<div class="th th-operation">
+							<td class="td-inner">&nbsp;</td>
+						</div>
+						<div class="th th-amount">
+							<td class="td-inner">合计</td>
+						</div>
+						<div class="th th-status">
+							<td class="td-inner">交易状态</td>
+						</div>
+						<div class="th th-change">
+							<td class="td-inner">交易操作</td>
+						</div>
+					</div>
+
+					<div class="order-main">
+						<div class="order-list">
+							{% for i in ob %}
+							<!-- 全部订单 -->
+							<div class="order-status5 myorderloop">
+								<div class="order-title">
+									<div class="dd-num">订单编号：<a href="javascript:;">123456789-{{ i.id }}</a></div>
+									<span>成交时间：{{ i.addtime }}</span>
+								</div>
+								<div class="order-content">
+									<div class="order-left">
+										{% for j in i.orderinfo_set.all %}
+										<ul class="item-list">
+											<li class="td td-item">
+												<div class="item-pic">
+													<a href="#" class="J_MakePoint">
+														<img style="width: 78px;" src="{{ j.gid.picurl }}" class="itempic J_ItemImg">
+													</a>
+												</div>
+												<div class="item-info">
+													<div class="item-basic-info">
+														<a href="#">
+															<p>{{ j.gid.title }}</p>
+														</a>
+													</div>
+												</div>
+											</li>
+											<li class="td td-price">
+												<div class="item-price">
+													{{ j.gid.price }}
+												</div>
+											</li>
+											<li class="td td-number">
+												<div class="item-number">
+													<span>×</span>{{ j.num }}
+												</div>
+											</li>
+										</ul>
+										{% endfor %}
+									</div>
+									<div class="order-right">
+										<li class="td td-amount">
+											<div class="item-amount">
+												合计：{{ i.totalprice }}
+											</div>
+										</li>
+										<div class="move-right">
+											<li class="td td-status">
+												<div class="item-status" style="margin-top: 5px">
+													{% if i.status == 1 %}
+													<p class="Mystatus">未付款</p>
+													{% elif i.status == 2 %}
+													<p class="Mystatus">待发货</p>
+													{% elif i.status == 3 %}
+													<p class="Mystatus">待收货</p>
+													{% elif i.status == 4 %}
+													<p class="Mystatus">已完成</p>
+													{% elif i.status == 5 %}
+													<p class="Mystatus">已取消</p>
+													{% endif %}
+												</div>
+											</li>
+											<li class="td td-change">
+												<div  oid="{{ i.id }}" class="delorder am-btn am-btn-danger anniu">
+													删除订单
+												</div>
+											</li>
+										</div>
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+
+				</div>
+				<!-- 待付款 -->
+				<div class="am-tab-panel am-fade" id="tab2">
+
+					<div class="order-top">
+						<div class="th th-item">
+							<td class="td-inner">商品</td>
+						</div>
+						<div class="th th-price">
+							<td class="td-inner">单价</td>
+						</div>
+						<div class="th th-number">
+							<td class="td-inner">数量</td>
+						</div>
+						<div class="th th-operation">
+							<td class="td-inner">&nbsp;</td>
+						</div>
+						<div class="th th-amount">
+							<td class="td-inner">合计</td>
+						</div>
+						<div class="th th-status">
+							<td class="td-inner">交易状态</td>
+						</div>
+						<div class="th th-change">
+							<td class="td-inner">交易操作</td>
+						</div>
+					</div>
+
+
+					<div class="order-main">
+						<div class="order-list">
+							{% for i in ob %}
+							{% if i.status == 1 %}
+							<!-- 全部订单 -->
+							<div class="order-status5 myorderloop">
+								<div class="order-title">
+									<div class="dd-num">订单编号：<a href="javascript:;">123456789-{{ i.id }}</a></div>
+									<span>成交时间：{{ i.addtime }}</span>
+								</div>
+								<div class="order-content">
+									<div class="order-left">
+										{% for j in i.orderinfo_set.all %}
+										<ul class="item-list">
+											<li class="td td-item">
+												<div class="item-pic">
+													<a href="#" class="J_MakePoint">
+														<img style="width: 78px;" src="{{ j.gid.picurl }}" class="itempic J_ItemImg">
+													</a>
+												</div>
+												<div class="item-info">
+													<div class="item-basic-info">
+														<a href="#">
+															<p>{{ j.gid.title }}</p>
+														</a>
+													</div>
+												</div>
+											</li>
+											<li class="td td-price">
+												<div class="item-price">
+													{{ j.gid.price }}
+												</div>
+											</li>
+											<li class="td td-number">
+												<div class="item-number">
+													<span>×</span>{{ j.num }}
+												</div>
+											</li>
+										</ul>
+										{% endfor %}
+									</div>
+									<div class="order-right">
+										<li class="td td-amount">
+											<div class="item-amount">
+												合计：{{ i.totalprice }}
+											</div>
+										</li>
+										<div class="move-right">
+											<li class="td td-status">
+												<div class="item-status" style="margin-top: 5px">
+													
+													<p class="Mystatus">未付款</p>
+													
+												</div>
+											</li>
+											<li class="td td-change">
+												<div  oid="{{ i.id }}" class="delorder am-btn am-btn-danger anniu">
+													删除订单
+												</div>
+											</li>
+										</div>
+									</div>
+								</div>
+							</div>
+							{% endif %}
+							{% endfor %}
+						</div>
+					</div>
+
+				</div>
+				<!-- 待发货 -->
+				<div class="am-tab-panel am-fade" id="tab3">
+					<div class="order-top">
+						<div class="th th-item">
+							<td class="td-inner">商品</td>
+						</div>
+						<div class="th th-price">
+							<td class="td-inner">单价</td>
+						</div>
+						<div class="th th-number">
+							<td class="td-inner">数量</td>
+						</div>
+						<div class="th th-operation">
+							<td class="td-inner">&nbsp;</td>
+						</div>
+						<div class="th th-amount">
+							<td class="td-inner">合计</td>
+						</div>
+						<div class="th th-status">
+							<td class="td-inner">交易状态</td>
+						</div>
+						<div class="th th-change">
+							<td class="td-inner">交易操作</td>
+						</div>
+					</div>
+					<div class="order-main">
+						<div class="order-list">
+							{% for i in ob %}
+							{% if i.status == 2 %}
+							<!-- 全部订单 -->
+							<div class="order-status5 myorderloop">
+								<div class="order-title">
+									<div class="dd-num">订单编号：<a href="javascript:;">123456789-{{ i.id }}</a></div>
+									<span>成交时间：{{ i.addtime }}</span>
+								</div>
+								<div class="order-content">
+									<div class="order-left">
+										{% for j in i.orderinfo_set.all %}
+										<ul class="item-list">
+											<li class="td td-item">
+												<div class="item-pic">
+													<a href="#" class="J_MakePoint">
+														<img style="width: 78px;" src="{{ j.gid.picurl }}" class="itempic J_ItemImg">
+													</a>
+												</div>
+												<div class="item-info">
+													<div class="item-basic-info">
+														<a href="#">
+															<p>{{ j.gid.title }}</p>
+														</a>
+													</div>
+												</div>
+											</li>
+											<li class="td td-price">
+												<div class="item-price">
+													{{ j.gid.price }}
+												</div>
+											</li>
+											<li class="td td-number">
+												<div class="item-number">
+													<span>×</span>{{ j.num }}
+												</div>
+											</li>
+										</ul>
+										{% endfor %}
+									</div>
+									<div class="order-right">
+										<li class="td td-amount">
+											<div class="item-amount">
+												合计：{{ i.totalprice }}
+											</div>
+										</li>
+										<div class="move-right">
+											<li class="td td-status">
+												<div class="item-status" style="margin-top: 5px">
+													
+													<p class="Mystatus">待发货</p>
+													
+												</div>
+											</li>
+											<li class="td td-change">
+												<div  oid="{{ i.id }}" class="delorder am-btn am-btn-danger anniu">
+													删除订单
+												</div>
+											</li>
+										</div>
+									</div>
+								</div>
+							</div>
+							{% endif %}
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+				<!-- 待收货 -->
+				<div class="am-tab-panel am-fade" id="tab4">
+					<div class="order-top">
+						<div class="th th-item">
+							<td class="td-inner">商品</td>
+						</div>
+						<div class="th th-price">
+							<td class="td-inner">单价</td>
+						</div>
+						<div class="th th-number">
+							<td class="td-inner">数量</td>
+						</div>
+						<div class="th th-operation">
+							<td class="td-inner">&nbsp;</td>
+						</div>
+						<div class="th th-amount">
+							<td class="td-inner">合计</td>
+						</div>
+						<div class="th th-status">
+							<td class="td-inner">交易状态</td>
+						</div>
+						<div class="th th-change">
+							<td class="td-inner">交易操作</td>
+						</div>
+					</div>
+					<div class="order-main">
+						<div class="order-list">
+							{% for i in ob %}
+							{% if i.status == 3 %}
+							<!-- 全部订单 -->
+							<div class="order-status5 myorderloop">
+								<div class="order-title">
+									<div class="dd-num">订单编号：<a href="javascript:;">123456789-{{ i.id }}</a></div>
+									<span>成交时间：{{ i.addtime }}</span>
+								</div>
+								<div class="order-content">
+									<div class="order-left">
+										{% for j in i.orderinfo_set.all %}
+										<ul class="item-list">
+											<li class="td td-item">
+												<div class="item-pic">
+													<a href="#" class="J_MakePoint">
+														<img style="width: 78px;" src="{{ j.gid.picurl }}" class="itempic J_ItemImg">
+													</a>
+												</div>
+												<div class="item-info">
+													<div class="item-basic-info">
+														<a href="#">
+															<p>{{ j.gid.title }}</p>
+														</a>
+													</div>
+												</div>
+											</li>
+											<li class="td td-price">
+												<div class="item-price">
+													{{ j.gid.price }}
+												</div>
+											</li>
+											<li class="td td-number">
+												<div class="item-number">
+													<span>×</span>{{ j.num }}
+												</div>
+											</li>
+										</ul>
+										{% endfor %}
+									</div>
+									<div class="order-right">
+										<li class="td td-amount">
+											<div class="item-amount">
+												合计：{{ i.totalprice }}
+											</div>
+										</li>
+										<div class="move-right">
+											<li class="td td-status">
+												<div class="item-status" style="margin-top: 5px">
+													
+													<p class="Mystatus">待收货</p>
+													
+												</div>
+											</li>
+											<li class="td td-change">
+												<div  oid="{{ i.id }}" class="delorder am-btn am-btn-danger anniu">
+													删除订单
+												</div>
+											</li>
+										</div>
+									</div>
+								</div>
+							</div>
+							{% endif %}
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+				<!-- 待评价 -->
+				<div class="am-tab-panel am-fade" id="tab5">
+					<div class="order-top">
+						<div class="th th-item">
+							<td class="td-inner">商品</td>
+						</div>
+						<div class="th th-price">
+							<td class="td-inner">单价</td>
+						</div>
+						<div class="th th-number">
+							<td class="td-inner">数量</td>
+						</div>
+						<div class="th th-operation">
+							<td class="td-inner">&nbsp;</td>
+						</div>
+						<div class="th th-amount">
+							<td class="td-inner">合计</td>
+						</div>
+						<div class="th th-status">
+							<td class="td-inner">交易状态</td>
+						</div>
+						<div class="th th-change">
+							<td class="td-inner">交易操作</td>
+						</div>
+					</div>
+
+					<div class="order-main">
+						<div class="order-list">
+							{% for i in ob %}
+							{% if i.status == 4 or i.status == 5 %}
+							<!-- 全部订单 -->
+							<div class="order-status5 myorderloop">
+								<div class="order-title">
+									<div class="dd-num">订单编号：<a href="javascript:;">123456789-{{ i.id }}</a></div>
+									<span>成交时间：{{ i.addtime }}</span>
+								</div>
+								<div class="order-content">
+									<div class="order-left">
+										{% for j in i.orderinfo_set.all %}
+										<ul class="item-list">
+											<li class="td td-item">
+												<div class="item-pic">
+													<a href="#" class="J_MakePoint">
+														<img style="width: 78px;" src="{{ j.gid.picurl }}" class="itempic J_ItemImg">
+													</a>
+												</div>
+												<div class="item-info">
+													<div class="item-basic-info">
+														<a href="#">
+															<p>{{ j.gid.title }}</p>
+														</a>
+													</div>
+												</div>
+											</li>
+											<li class="td td-price">
+												<div class="item-price">
+													{{ j.gid.price }}
+												</div>
+											</li>
+											<li class="td td-number">
+												<div class="item-number">
+													<span>×</span>{{ j.num }}
+												</div>
+											</li>
+										</ul>
+										{% endfor %}
+									</div>
+									<div class="order-right">
+										<li class="td td-amount">
+											<div class="item-amount">
+												合计：{{ i.totalprice }}
+											</div>
+										</li>
+										<div class="move-right">
+											<li class="td td-status">
+												<div class="item-status" style="margin-top: 5px">
+													
+													{% if i.status == 4 %}
+													<p class="Mystatus">已完成</p>
+													{% elif i.status == 5 %}
+													<p class="Mystatus">已取消</p>
+													{% endif %}
+												</div>
+											</li>
+											<li class="td td-change">
+												<div  oid="{{ i.id }}" class="delorder am-btn am-btn-danger anniu">
+													删除订单
+												</div>
+											</li>
+										</div>
+									</div>
+								</div>
+							</div>
+							{% endif %}
+							{% endfor %}
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+<script>
+	$('.delorder').click(function(){
+		var oid = $(this).attr('oid')
+		var $div = $(this).parents('.myorderloop')
+		$.get("{% url 'delmyorder' %}", {oid: oid}, function(data){
+			alert(data['msg'])
+			$div.remove()
+		}, 'json')
+	})
+</script>
+{% endblock %}

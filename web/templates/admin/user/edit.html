@@ -1,0 +1,97 @@
+{% extends 'admin/public/base.html' %}
+
+{% block tit %}
+<title>信息修改</title>
+{% endblock %}
+
+{% block con %}
+
+<div class="admin-biaogelist">
+    
+    <div class="listbiaoti am-cf">
+      <ul class="am-icon-flag on"> 会员管理</ul>
+      
+      <dl class="am-icon-home" style="float: right;"> 当前位置： 会员管理 &gt; <a href="#">信息修改</a></dl>
+
+      
+      
+    </div>
+    
+    <div class="fbneirong">
+      <form class="am-form" action="{% url 'admin_user_update' %}" method="post" enctype="multipart/form-data">
+        {% if e == 0 %}
+        <input type="hidden" name="e" value="0">
+        {% endif %}
+        <div class="am-form-group am-cf">
+          <div class="zuo">用户名：</div>
+          <div class="you">
+            <input value="{{ ob.username }}" name="username" type="text" class="am-input-sm" id="doc-ipt-text-1" placeholder="请输入用户名">
+          </div>
+        </div>
+
+        <div class="am-form-group am-cf">
+          <div class="zuo">年龄：</div>
+          <div class="you">
+            <input value="{{ ob.age }}" name="age" type="text" class="am-input-sm" id="doc-ipt-text-1" placeholder="请输入年龄">
+          </div>
+        </div>
+        
+        <div class="am-form-group am-cf">
+            <div class="zuo">性别：</div>
+            <div class="you" style="margin-top: 5px;">
+              <label class="am-radio-inline">
+                <input {% if ob.sex == '男' %} checked {% endif %} type="radio" name="sex" value="男">
+                男 </label>
+              <label class="am-radio-inline">
+                <input {% if ob.sex == '女' %} checked {% endif %} type="radio" name="sex" value="女">
+                女 </label>
+            </div>
+        </div>
+
+        <div class="am-form-group am-cf">
+          <div class="zuo">手机号：</div>
+          <div class="you">
+            <input value="{{ ob.phone }}" name="phone" type="text" class="am-input-sm" id="doc-ipt-text-1" placeholder="请输入手机号">
+          </div>
+        </div>
+
+        <div class="am-form-group am-cf">
+          <div class="zuo">邮箱：</div>
+          <div class="you">
+            <input value="{{ ob.email }}" name="email" type="text" class="am-input-sm" id="doc-ipt-text-1" placeholder="请输入邮箱">
+          </div>
+        </div>
+        
+        <div class="am-form-group am-cf">
+          <div class="zuo">头像：</div>
+          <div class="you" style="height: 45px;">
+            <input name="picurl" type="file" id="doc-ipt-file-1">
+            <p class="am-form-help">请选择要上传的头像...</p>
+          </div>
+        </div>
+
+        <div class="am-form-group am-cf">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{ ob.id }}">
+          <div class="you" style="margin-left: 11%;">
+              <button type="submit" class="am-btn am-btn-success am-radius">修改</button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+
+  
+ 
+     <div class="foods">
+      <ul>
+        版权所有@2018
+      </ul>
+      <dl>
+        <a href="" title="返回头部" class="am-icon-btn am-icon-arrow-up"></a>
+      </dl>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'admin/public/base.html' %}
+
+{% block tit %}
+<title>信息修改</title>
+{% endblock %}
+
+{% block con %}
+
+<div class="admin-biaogelist">
+    
+    <div class="listbiaoti am-cf">
+      <ul class="am-icon-flag on"> 商品分类管理</ul>
+      
+      <dl class="am-icon-home" style="float: right;"> 当前位置： 商品分类管理 &gt; <a href="#">信息修改</a></dl>
+
+      
+      
+    </div>
+    
+    <div class="fbneirong">
+      <form class="am-form" action="{% url 'admin_type_update' %}" method="post" enctype="multipart/form-data">
+
+        <div class="am-form-group am-cf">
+          <div class="zuo">分类名称：</div>
+          <div class="you">
+            <select name="tid" style="font-size: 14px; width: 200px">
+              <option value="0" disabled>全部分类</option>
+              {% for i in allob %}
+                {% if i == ob %}
+                <option value="{{ i.id }}" selected>{{ i.typename }}</option>
+                {% else %}
+                <option value="{{ i.id }}" disabled>{{ i.typename }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="am-form-group am-cf">
+          <div class="zuo">新的分类名称：</div>
+          <div class="you">
+            <input value="{{ ob.typename }}" name="typename" type="text" class="am-input-sm" id="doc-ipt-name-1" placeholder="请输入商品分类名称"/>
+          </div>
+        </div>
+
+        <div class="am-form-group am-cf">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{ ob.id }}">
+          <div class="you" style="margin-left: 11%;">
+              <button type="submit" class="am-btn am-btn-success am-radius">修改</button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+
+  
+ 
+     <div class="foods">
+      <ul>
+        版权所有@2018
+      </ul>
+      <dl>
+        <a href="" title="返回头部" class="am-icon-btn am-icon-arrow-up"></a>
+      </dl>
+    </div>
+
+</div>
+
+{% endblock %}

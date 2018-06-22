@@ -22,11 +22,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '97^8_n@l$u8k7ax^g-45p%h_mvc+=xbbv1e*31ro9bhveo1o1+'
 
+# 关闭DEBUG后会关闭静态文件加载，强制加载静态文件：--insecure参数
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+# session
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Application definition
 
@@ -37,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'myadmin',
+    'home',
+    'ueditor',
 ]
 
 MIDDLEWARE = [
@@ -47,6 +54,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #自定义的中间件
+    'myadmin.AdminMiddleware.AdminLoginMiddleware'
 ]
 
 ROOT_URLCONF = 'web.urls'
@@ -54,7 +63,7 @@ ROOT_URLCONF = 'web.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,13 +82,23 @@ WSGI_APPLICATION = 'web.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'djangodb',
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -103,18 +122,55 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+# email
+EMAIL_USE_SSL = True
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = '1980919138@qq.com' # 帐号
+EMAIL_HOST_PASSWORD = 'tgrmklakvyereabb'  # 密码
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# # qq IMAP/SMTP 配置
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.qq.com'
+# EMAIL_PORT = 465  # 或者 465/587是设置了 SSL 加密方式
+# # 发送邮件的邮箱
+# EMAIL_HOST_USER = '1980919138@qq.com'
+# # 在邮箱中设置的客户端授权密码
+# EMAIL_HOST_PASSWORD = 'tgrmklakvyereabb'  # 如果重新设置了新的授权码,直接使用最新的授权码即可
+# EMAIL_USE_TLS = True  # 这里必须是 True，否则发送不成功
+# # 收件人看到的发件人, 必须是一直且有效的
+# EMAIL_FROM = 'Tencent<1980919138@qq.com>'
+# # DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# # qq POP3/SMTP 配置
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.qq.com'
+# EMAIL_PORT = 995  # 或者 995是设置了 SSL 加密方式
+# #发送邮件的邮箱
+# EMAIL_HOST_USER = '1980919138@qq.com'
+# #在邮箱中设置的客户端授权密码
+# EMAIL_HOST_PASSWORD = 'wtlfpqjxyelycjda'  # 如果重新设置了新的授权码,直接使用最新的授权码即可
+# EMAIL_USE_TLS = True  # 这里必须是 True，否则发送不成功
+# #收件人看到的发件人
+# EMAIL_FROM = 'Tencent<1980919138@qq.com>'
+# # DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

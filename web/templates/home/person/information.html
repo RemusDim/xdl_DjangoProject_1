@@ -1,0 +1,151 @@
+{% extends 'home/person/index.html' %}
+
+{% block title %}
+<title>个人资料</title>
+{% endblock %}
+
+{% block link %}
+<link href="/static/home/AmazeUI-2.4.2/assets/css/admin.css" rel="stylesheet" type="text/css">
+<link href="/static/home/AmazeUI-2.4.2/assets/css/amazeui.css" rel="stylesheet" type="text/css">
+
+<link href="/static/home/css/personal.css" rel="stylesheet" type="text/css">
+<link href="/static/home/css/infstyle.css" rel="stylesheet" type="text/css">
+<script src="/static/home/AmazeUI-2.4.2/assets/js/jquery.min.js" type="text/javascript"></script>
+<script src="/static/home/AmazeUI-2.4.2/assets/js/amazeui.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block con %}
+<div class="main-wrap">
+
+	<div class="user-info">
+		<!--标题 -->
+		<div class="am-cf am-padding">
+			<div class="am-fl am-cf"><strong class="am-text-danger am-text-lg">个人资料</strong> / <small>Personal&nbsp;information</small></div>
+		</div>
+		<hr/>
+
+		<form id="myform" class="am-form am-form-horizontal" method="post" enctype="multipart/form-data" data-am-validator>
+			<!--头像 -->
+			<div class="user-infoPic">
+
+				<div class="filePic">
+					<input name="picurl" type="file" class="inputPic" id="file_upload" allowexts="gif,jpeg,jpg,png,bmp" accept="image/*">
+					<img id="preview" class="am-circle am-img-thumbnail" src="{{ ob.picurl }}" alt="" />
+				</div>
+
+				<p class="am-form-help">头像</p>
+
+				<div class="info-m">
+					<div><b>登录名：<i>
+						{% if ob.username %}
+							{{ ob.username }}
+						{% elif ob.email %}
+							{{ ob.email }}
+						{% elif ob.phone %}
+							{{ ob.phone }}
+						{% endif %}
+					</i></b></div>
+					<div class="u-level">
+						<span class="rank r2">
+							{% if ob.status == 1 %}
+				            <s class="vip1"></s><a class="classes" href="#">普通用户</a>
+							{% elif ob.status == 0 %}
+				            <s class="vip1"></s><a class="classes" href="#">系统管理员</a>
+				            {% endif %}
+			            </span>
+					</div>
+					<div class="u-safety">
+						<a href="safety.html">
+						 账户安全
+						 {% load pagetag %}
+						<span class="u-profile"><i class="bc_ee0000" style="width: 60px;" width="0">{% score ob %} 分</i></span>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<!--个人信息 -->
+			<div class="info-main">
+				<!-- <form id="myform" class="am-form am-form-horizontal" method="post" data-am-validator> -->
+					{% csrf_token %}
+					<div class="am-form-group">
+						<label for="user-name2" class="am-form-label">用户名</label>
+						<div class="am-form-content">
+							<input name="username" type="text" id="user-name2" {% if ob.username is None %} placeholder="未设置" required {% else %} placeholder="{{ ob.username }}" {% endif %}">
+
+						</div>
+					</div>
+
+					<div class="am-form-group">
+						<label class="am-form-label">性别</label>
+						<div class="am-form-content sex">
+							<label class="am-radio-inline">
+								<input name="sex" {% if ob.sex == '男' %} checked {% endif %} type="radio" name="radio10" value="男" data-am-ucheck> 男
+							</label>
+							<label class="am-radio-inline">
+								<input name="sex" {% if ob.sex == '女' %} checked {% endif %} type="radio" name="radio10" value="女" data-am-ucheck> 女
+							</label>
+						</div>
+					</div>
+
+					<div class="am-form-group">
+						<label for="user-age" class="am-form-label">年龄</label>
+						<div class="am-form-content">
+							<input name="age" id="user-age" placeholder="{% if ob.age is None %} 未设置 {% else %} {{ ob.age }} {% endif %}" type="tel">
+
+						</div>
+					</div>
+
+					<div class="am-form-group">
+						<label for="user-phone" class="am-form-label">电话</label>
+						<div class="am-form-content">
+							<input name="phone" id="user-phone" placeholder="{% if ob.phone is None %} 未设置 {% else %} {{ ob.phone }} {% endif %}" type="tel">
+
+						</div>
+					</div>
+
+					<div class="am-form-group">
+						<label for="user-email" class="am-form-label">电子邮件</label>
+						<div class="am-form-content">
+							<input name="email" id="user-email" placeholder="{% if ob.email is None %} 未设置 {% else %} {{ ob.email }} {% endif %}" type="email">
+
+						</div>
+					</div>
+					<div class="info-btn">
+						<button class="am-btn am-btn-danger">保&nbsp;存</button>
+					</div>
+
+				<!-- </form> -->
+			</div>
+		</form>
+	</div>
+
+</div>
+<script>
+	// 页面实时显示图片
+  var tst = null
+  $('#file_upload').change(function(event) {
+    /* Act on the event */
+    var fileObj = $(this)[0];
+    var windowURL = window.URL || window.webkitURL;
+    var dataURL;
+    var $img = $("#preview");
+
+    if (fileObj && fileObj.files && fileObj.files[0]) {
+      tst = fileObj.files
+      var typename = fileObj.files[0].type
+      if(typename.substring(0, 5) == 'image'){
+        // 拿到本地图片http格式的路径
+        dataURL = windowURL.createObjectURL(fileObj.files[0]);
+        $img.attr('src', dataURL);
+      }else{
+        alert('请传入正确格式的图片!')
+      }
+    } else {
+        fileObj.files = tst
+    }
+  });
+
+</script>
+{% endblock %}
+				

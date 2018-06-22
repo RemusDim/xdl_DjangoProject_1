@@ -1,0 +1,175 @@
+{% extends 'home/public/base.html' %}
+
+{% block title %}
+<title>列表页面</title>
+{% endblock %}
+
+{% block link %}
+
+<link href="/static/home/AmazeUI-2.4.2/assets/css/amazeui.css" rel="stylesheet" type="text/css" />
+<link href="/static/home/AmazeUI-2.4.2/assets/css/admin.css" rel="stylesheet" type="text/css" />
+
+<link href="/static/home/basic/css/demo.css" rel="stylesheet" type="text/css" />
+
+<link href="/static/home/css/seastyle.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="/static/home/basic/js/jquery-1.7.min.js"></script>
+<script type="text/javascript" src="/static/home/js/script.js"></script>
+
+{% endblock %}
+
+{% block con %}
+
+<div class="search">
+            <div class="search-list">
+            <div class="nav-table">
+               <div class="long-title"><a href="{% url 'index' %}" class="all-goods">商城首页</a></div>
+               <div class="nav-cont">
+                    <ul>
+                        {% for i in typedata %}
+                        <li class="qc"><a href="{% url 'list' i.id %}">{{ i.typename }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            
+                
+                    <div class="am-g am-g-fixed">
+                        <div class="am-u-sm-12 am-u-md-12">
+                        <div class="theme-popover">                                                     
+                            <div class="searchAbout">
+                                <span class="font-pale">一级分类：</span>
+                                <a title="xxxx" href="{% url 'list' data.id %}">{{ data.typename }}</a>
+
+                            </div>
+                            <!-- 筛选 -->
+                            <ul class="select">
+                                <p class="title font-normal">
+                                    <span class="total fl">总共搜索到<strong class="num">&nbsp;{{ data.num }}&nbsp;</strong>件相关商品</span>
+                                </p>
+                                <div class="clear"></div>
+                                <li class="select-result" style="display: none;">
+                                    <dl>
+                                        <dt>已选</dt>
+                                        <dd class="select-no" style="display: block;"></dd>
+                                        <p class="eliminateCriteria" style="display: block;">清除</p>
+                                    </dl>
+                                </li>
+                                <div class="clear"></div>
+                                <li class="select-list">
+                                    <dl id="select1">
+                                        <dt class="am-badge am-round">二级分类：</dt>   
+                                    
+                                         <div class="dd-conent">
+                                            {% for i in data.sub %}
+                                            <a href="{% url 'list' i.id %}" {% if data.ob == i %} style="color: blue" {% endif %} >{{ i.typename }}</a>
+                                            {% endfor %}
+                                         </div>
+                                    </dl>
+                                </li>
+                                <li class="select-list">
+                                    <dl id="select2">
+                                        <dt class="am-badge am-round">三级分类：</dt>
+                                        <div class="dd-conent">
+                                            {% for i in data.sub %}
+                                                {% for j in i.sub %}
+                                                <a href="{% url 'list' j.id %}" {% if data.ob == j %} style="color: blue" {% endif %} >{{ j.typename }}</a>
+                                                {% endfor %}
+                                            {% endfor %}
+                                        </div>
+                                    </dl>
+                                </li>
+                            </ul>
+                            <div class="clear"></div>
+                        </div>
+                            <div class="search-content">
+                                <div class="sort">
+                                    <li class="first"><a title="综合">综合排序</a></li>
+                                    <!-- <li><a title="销量">销量排序</a></li>
+                                    <li><a title="价格">价格优先</a></li>
+                                    <li class="big"><a title="评价" href="#">评价为主</a></li> -->
+                                </div>
+                                <div class="clear"></div>
+
+                                <ul class="am-avg-sm-2 am-avg-md-3 am-avg-lg-4 boxes">
+                                    {% for i in data.goods %}
+                                        <li>
+                                            <div class="i-pic limit">
+                                                <a href="{% url 'info' i.id %}">
+                                                    <img style="max-height: 200px" src="{{ i.picurl }}">
+                                                </a>                                            
+                                                <p class="title fl"> {{ i.title }}</p>
+                                                <p class="price fl">
+                                                    <b>¥</b>
+                                                    <strong>{{ i.price }}</strong>
+                                                </p>
+                                                <p class="number fl">
+                                                    销量<span>{{ i.num }}</span>
+                                                </p>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="search-side">
+
+                                <div class="side-title">
+                                    热销产品
+                                </div>
+                                {% for i in toplist %}
+                                <li>
+                                    <div class="i-pic check">
+                                        <img src="{{ i.picurl }}">
+                                        <p class="check-title">{{ i.title }}</p>
+                                        <p class="price fl">
+                                            <b>¥</b>
+                                            <strong>{{ i.price }}</strong>
+                                        </p>
+                                        <p class="number fl">
+                                            销量<span>{{ i.num }}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </div>
+                            <div class="clear"></div>
+                            <!--分页 -->
+                            <!-- <ul class="am-pagination am-pagination-right">
+                                <li class="am-disabled"><a href="#">«</a></li>
+                                <li class="am-active"><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#">5</a></li>
+                                <li><a href="#">»</a></li>
+                            </ul> -->
+
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <div class="footer-hd">
+                            <p>
+                                <a href="#">恒望科技</a>
+                                <b>|</b>
+                                <a href="#">商城首页</a>
+                                <b>|</b>
+                                <a href="#">支付宝</a>
+                                <b>|</b>
+                                <a href="#">物流</a>
+                            </p>
+                        </div>
+                        <div class="footer-bd">
+                            <p>
+                                <a href="#">关于恒望</a>
+                                <a href="#">合作伙伴</a>
+                                <a href="#">联系我们</a>
+                                <a href="#">网站地图</a>
+                                <em>© 2015-2025 Hengwang.com 版权所有</em>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+{% endblock %}

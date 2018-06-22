@@ -1,0 +1,167 @@
+{% extends 'admin/public/base.html' %}
+
+{% block tit %}
+<title>会员添加</title>
+{% endblock %}
+
+{% block con %}
+
+<div class="admin-biaogelist">
+    
+    <div class="listbiaoti am-cf">
+      <ul class="am-icon-flag on"> 会员管理</ul>
+      
+      <dl class="am-icon-home" style="float: right;"> 当前位置： 会员管理 &gt; <a href="#">会员添加</a></dl>
+
+      
+      
+    </div>
+    
+    <div class="fbneirong">
+      <form data-am-validator class="am-form" action="{% url 'admin_user_insert' %}" method="post" enctype="multipart/form-data" id="doc-vld-msg form-with-tooltip">
+      <fieldset>
+        <div class="am-form-group am-cf">
+          <div class="zuo">用户名：</div>
+          <div class="you">
+            <input minlength="3" name="username" type="text" class="am-input-sm" id="doc-ipt-name-1" placeholder="请输入用户名（至少三个字符）" required/>
+          </div>
+        </div>
+
+        <div class="am-form-group am-cf">
+          <div class="zuo">密码：</div>
+          <div class="you">
+            <input name="password" minlength="6" type="password" class="am-input-sm" id="doc-ipt-pwd-1" placeholder="请输入密码（至少六位）" required data-foolish-msg="把 IQ 卡密码交出来！"/>
+          </div>
+        </div>
+
+        <div class="am-form-group am-cf">
+          <div class="zuo">确认密码：</div>
+          <div class="you">
+            <input data-equal-to="#doc-ipt-pwd-1" name="password2" minlength="6" type="password" class="am-input-sm" id="doc-ipt-pwd-2" placeholder="请与上面输入的值一致" required/>
+          </div>
+        </div>
+
+        <div class="am-form-group am-cf">
+          <div class="zuo">年龄：</div>
+          <div class="you">
+            <input name="age" type="text" class="am-input-sm" id="doc-ipt-age-1" placeholder="输入年龄（18-120）" min="18" max="120" required />
+          </div>
+        </div>
+        
+        <div class="am-form-group am-cf">
+            <div class="zuo">性别：</div>
+            <div class="you" style="margin-top: 5px;">
+              <label class="am-radio-inline">
+                <input type="radio" name="sex" value="男">
+                男 </label>
+              <label class="am-radio-inline">
+                <input type="radio" name="sex" value="女">
+                女 </label>
+            </div>
+        </div>
+
+        <div class="am-form-group am-cf">
+          <div class="zuo">手机号：</div>
+          <div class="you">
+            <input name="phone" type="text" class="am-input-sm" id="doc-ipt-phone-1" placeholder="请输入手机号" maxlength="11" minlength="11" required/>
+          </div>
+        </div>
+
+        <div class="am-form-group am-cf">
+          <div class="zuo">邮箱：</div>
+          <div class="you">
+            <input name="email" type="email" class="am-input-sm" id="doc-ipt-email-1" placeholder="请输入正确格式的邮箱" required/>
+          </div>
+        </div>
+        
+        <div class="am-form-group am-cf">
+          <div class="zuo">头像：</div>
+          <div class="you" style="height: 45px;">
+            <input id="file_upload" name="picurl" type="file" id="doc-ipt-file-1">
+            <p class="am-form-help">请选择要上传的头像... </p>
+          </div>
+        </div>
+
+        <div class="am-form-group am-cf">
+          <div class="zuo"></div>
+          <div class="you">
+            <img id="preview" style="height: 100px; border: 1px solid gray" src="/static/pics/default/default.png" alt="请传入正确格式的图片"/>
+          </div>
+        </div>
+
+        <div class="am-form-group am-cf">
+        {% csrf_token %}
+          <div class="you" style="margin-left: 11%;">
+              <button onclick="doUpload(); type="submit" class="am-btn am-btn-secondary am-radius" type="submit">提交</button>
+
+          </div>
+        </div>
+      </fieldset>
+      </form>
+
+    </div>
+
+  
+ 
+     <div class="foods">
+      <ul>
+        版权所有@2018
+      </ul>
+      <dl>
+        <a href="" title="返回头部" class="am-icon-btn am-icon-arrow-up"></a>
+      </dl>
+    </div>
+
+</div>
+
+<script>
+  // 页面实时显示图片
+  var tst = null
+  $('#file_upload').change(function(event) {
+    /* Act on the event */
+    var fileObj = $(this)[0];
+    var windowURL = window.URL || window.webkitURL;
+    var dataURL;
+    var $img = $("#preview");
+
+    if (fileObj && fileObj.files && fileObj.files[0]) {
+      tst = fileObj.files
+      var typename = fileObj.files[0].type
+      if(typename.substring(0, 5) == 'image'){
+        // 拿到本地图片http格式的路径
+        dataURL = windowURL.createObjectURL(fileObj.files[0]);
+        $img.attr('src', dataURL);
+      }else{
+        alert('请传入正确格式的图片!')
+      }
+    } else {
+        fileObj.files = tst
+    }
+  });
+
+  // 表单验证使用
+  $(function() {
+  $('#doc-vld-msg').validator({
+    onValid: function(validity) {
+      $(validity.field).closest('.am-form-group').find('.am-alert').hide();
+    },
+
+    onInValid: function(validity) {
+      var $field = $(validity.field);
+      var $group = $field.closest('.am-form-group');
+      var $alert = $group.find('.am-alert');
+      // 使用自定义的提示信息 或 插件内置的提示信息
+      var msg = $field.data('请输入正确的信息 ^_^') || this.getValidationMessage(validity);
+
+      if (!$alert.length) {
+        $alert = $('<div class="am-alert am-alert-danger"></div>').hide().
+          appendTo($group);
+      }
+
+      $alert.html(msg).show();
+    }
+  });
+});
+</script>
+
+{% endblock %}

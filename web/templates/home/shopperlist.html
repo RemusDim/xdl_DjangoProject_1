@@ -1,0 +1,349 @@
+{% extends 'home/public/base.html' %}
+
+{% block title %}
+<title>购物车</title>
+{% endblock %}
+
+{% block link %}
+<link href="/static/home/AmazeUI-2.4.2/assets/css/amazeui.css" rel="stylesheet" type="text/css" />
+<link href="/static/home/basic/css/demo.css" rel="stylesheet" type="text/css" />
+<link href="/static/home/css/cartstyle.css" rel="stylesheet" type="text/css" />
+<link href="/static/home/css/optstyle.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" src="/static/home/js/jquery.js"></script>
+{% endblock %}
+
+{% block con %}
+<!--分类-->
+<div class="nav-table">
+   <div class="long-title"><a href="{% url 'index' %}" class="all-goods">商城首页</a></div>
+   <div class="nav-cont">
+        <ul>
+            {% for i in typedata %}
+            <li class="qc"><a href="{% url 'list' i.id %}">{{ i.typename }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class="concent">
+    <div id="cartTable">
+        <div class="cart-table-th">
+            <div class="wp">
+                <div class="th th-chk">
+                    <div id="J_SelectAll1" class="select-all J_SelectAll">
+                    </div>
+                </div>
+                <div class="th th-item">
+                    <div class="td-inner">商品信息</div>
+                </div>
+                <div class="th th-price">
+                    <div class="td-inner">单价</div>
+                </div>
+                <div class="th th-amount">
+                    <div class="td-inner">数量</div>
+                </div>
+                <div class="th th-sum">
+                    <div class="td-inner">金额</div>
+                </div>
+                <div class="th th-op">
+                    <div class="td-inner">操作</div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+            <div class="bundle  bundle-last ">
+                <div class="clear"></div>
+                <div class="bundle-main">
+                    {% for i in request.session.ushopper.values %}
+                    <ul class="item-content clearfix">
+                        <li class="td td-chk">
+                            <div class="cart-checkbox ">
+                                <input gid="{{ i.id }}" style="margin-top: 40px" class="J_CheckBox" id="J_CheckBox" name="items[]" value="0" type="checkbox">
+                                <label for="J_CheckBox_170037950254"></label>
+                            </div>
+                        </li>
+                        <li class="td td-item">
+                            <div class="item-pic">
+                                <a href="#" target="_blank" data-title="{{ i.title }}" class="J_MakePoint" data-point="tbcart.8.12">
+                                    <img style="height: 65px" src="{{ i.pic }}" class="itempic J_ItemImg"></a>
+                            </div>
+                            <div class="item-info">
+                                <div class="item-basic-info">
+                                    <a style="margin-top: 28px; display: inline-block;" href="#" target="_blank" title="{{ i.title }}" class="item-title J_MakePoint" data-point="tbcart.8.11">{{ i.title }}</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="td td-info">
+                            <div class="item-props ">
+                            </div>
+                        </li>
+                        <li class="td td-price">
+                            <div class="item-price price-promo-promo">
+                                <div class="price-content">
+                                    <!-- <div class="price-line">
+                                        <em class="price-original">78.00</em>
+                                    </div> -->
+                                    <div class="price-line">
+                                        <em style="margin-top: 28px; display: inline-block;" class="J_Price price-now" tabindex="0">{{ i.price }}</em>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="td td-amount">
+                            <div class="amount-wrapper ">
+                                <div class="item-amount ">
+                                    <div class="sl" style="margin-top: 22px; display: inline-block;">
+                                        <input gid="{{ i.id }}" class="subbtn min am-btn" name="" type="button" value="-">
+                                        <input class="text_box J_Itemnum" name="" type="text" value="{{ i.num }}" style="width:30px;">
+                                        <input gid="{{ i.id }}" class="addbtn add am-btn" name="" type="button" value="+">
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="td td-sum">
+                            <div class="td-inner">
+                                {% load pagetag %}
+                                <em style="margin-top: 26px; display: inline-block;" tabindex="0" class="J_ItemSum number">{% multiplication i.price i.num %}</em>
+                            </div>
+                        </li>
+                        <li class="td td-op">
+                            <div class="td-inner" style="margin-top: 25px; display: inline-block;">
+                                <!-- <a title="移入收藏夹" class="btn-fav" href="#">移入收藏夹</a> -->
+                                <a gid="{{ i.id }}" id="delonedata" data-point-url="#" class="delonedata delete">删除</a>
+                            </div>
+                        </li>
+                    </ul>
+                    {% endfor %}
+                    {% if not request.session.ushopper %}
+                    <div style="height: 300px;">
+                        <center>
+                            <br><br><br><br><br>
+                            <h2>您的购物车空空如也...</h2>
+                            <h2>去<a style="color: red;" href="{% url 'index' %}">首页</a>逛逛吧~~~</h2>
+                        </center>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+
+    <div class="float-bar-wrapper">
+        <div id="J_SelectAll2" class="select-all J_SelectAll">
+            <div class="cart-checkbox">
+                <input class="check-all check" id="J_SelectAllCbx2" name="select-all" value="1" type="checkbox">
+                <label for="J_SelectAllCbx2"></label>
+            </div>
+            <span>全选</span>
+        </div>
+        <div class="operations">
+            <!-- <a href="#" hidefocus="true" class="deleteAll">删除</a> -->
+            <!-- <a href="#" hidefocus="true" class="J_BatchFav">移入收藏夹</a> -->
+            <a href="{% url 'shopperdel' %}" hidefocus="true" class="J_BatchFav">清空购物车</a>
+        </div>
+        <div class="float-bar-right">
+            <div class="amount-sum">
+                <span class="txt">已选商品</span>
+                <em id="J_SelectedItemsCount">0</em><span class="txt">件</span>
+                <div class="arrow-box">
+                    <span class="selected-items-arrow"></span>
+                    <span class="arrow"></span>
+                </div>
+            </div>
+            <div class="price-sum">
+                <span class="txt">合计:</span>
+                <strong class="price">¥<em id="J_Total">0.00</em></strong>
+            </div>
+            <div class="btn-area">
+                <a href="#" id="J_Go" class="myjs_btn submit-btn submit-btn-disabled" aria-label="请注意如果没有选择宝贝，将无法结算">
+                    <span>去结算</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <div class="footer-hd">
+            <p>
+                <a href="#">恒望科技</a>
+                <b>|</b>
+                <a href="#">商城首页</a>
+                <b>|</b>
+                <a href="#">支付宝</a>
+                <b>|</b>
+                <a href="#">物流</a>
+            </p>
+        </div>
+        <div class="footer-bd">
+            <p>
+                <a href="#">关于恒望</a>
+                <a href="#">合作伙伴</a>
+                <a href="#">联系我们</a>
+                <a href="#">网站地图</a>
+                <em>© 2015-2025 Hengwang.com 版权所有</em>
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // 结算按钮
+    $('.myjs_btn').click(function(event) {
+        /* Act on the event */
+        // 组织数据
+        myarray = []
+        $('.J_CheckBox').each(function(){
+            if($(this).attr('checked')){
+                myarray.push($(this).attr('gid'))
+            }
+        })
+        mydata = myarray.join(',')
+        // console.log(mydata)
+        // 传递数据
+        if(!mydata){
+            alert('请选择要购买的商品！')
+        }else{
+            location.href="/order/confirm/?gid="+mydata
+        }
+        return false
+    });
+    // 选择框封装的函数
+    function checktest(ob){
+        var nu = ob.parents('ul').find('.J_Itemnum').val();
+        var pri = ob.parents('ul').find('.J_ItemSum').text();
+        // 已选总商品数
+        var countnum = $('#J_SelectedItemsCount').text();
+        // 总合计
+        var countpri = $('#J_Total').text();
+        if(ob.attr('checked')){
+            $('#J_SelectedItemsCount').text(parseInt(countnum) + parseInt(nu));
+            $('#J_Total').text(parseFloat(countpri) + parseFloat(pri));
+        }else{
+            $('#J_SelectedItemsCount').text(parseInt(countnum) - parseInt(nu));
+            $('#J_Total').text(parseFloat(countpri) - parseFloat(pri));
+        }
+    }
+    // 选择框
+    $('.J_CheckBox').change(function(){
+        // body...
+        checktest($(this))
+    })
+
+    // 全选按钮
+    $('#J_SelectAllCbx2').change(function(){
+        if($(this).attr('checked')){
+            $('.J_CheckBox').attr('checked', true)
+            $('#J_SelectedItemsCount').text(0);
+            $('#J_Total').text(0);
+            $('.J_CheckBox').change()
+        }else{
+            $('.J_CheckBox').attr('checked', false)
+            $('.J_CheckBox').change()
+            $('#J_SelectedItemsCount').text(0);
+            $('#J_Total').text(0);
+        }
+    })
+
+    // 通过class获取 + 按钮
+    $('.addbtn').click(function(event) {
+        /* Act on the event */
+        // 直接获取当前对象的属性，直接操作
+        var gdnum = $(this).parents('div').find('.J_Itemnum').val()
+        var gid = $(this).attr('gid')
+        var $thispir = $(this).parents('ul').find('.J_ItemSum')
+        var pri = $(this).parents('ul').find('.J_ItemSum').text();
+        var onepri = $(this).parents('ul').find('.J_Price').text();
+
+        // checkbox
+        var chec = $(this).parents('ul').find('.J_CheckBox')
+        // 已选总商品数
+        var countnum = $('#J_SelectedItemsCount');
+        // 总合计
+        var countpri = $('#J_Total');
+
+        gdnum = parseInt(gdnum) + 1
+        $.get('{% url "shopperaddgoods" %}', {gdnum: gdnum, gid: gid}, function(data){
+            if(data == '1'){
+                $('#J_MiniCartNum').text(parseInt($('#J_MiniCartNum').text())+1)
+                $('#myshoppernum').text(parseInt($('#myshoppernum').text())+1)
+                $thispir.text(parseFloat(pri)+parseFloat(onepri)+'.0')
+                if(chec.attr('checked')){
+                    countnum.text(parseInt(countnum.text())+1)
+                    countpri.text(parseInt(countpri.text())+parseInt(onepri))
+                }
+            }else{
+                alert('修改数量失败！')
+            }
+        });
+    });
+    // 通过class获取 - 按钮
+    $('.subbtn').click(function(event) {
+        /* Act on the event */
+        // 直接获取当前对象的属性，直接操作
+        var gdnum = $(this).parents('div').find('.J_Itemnum').val()
+        var gid = $(this).attr('gid')
+        var $thispir = $(this).parents('ul').find('.J_ItemSum')
+        var pri = $(this).parents('ul').find('.J_ItemSum').text();
+        var onepri = $(this).parents('ul').find('.J_Price').text();
+
+        // checkbox
+        var chec = $(this).parents('ul').find('.J_CheckBox')
+        // 已选总商品数
+        var countnum = $('#J_SelectedItemsCount');
+        // 总合计
+        var countpri = $('#J_Total');
+
+        if(gdnum == '0'){
+            gdnum = 0
+        }else{
+            gdnum = parseInt(gdnum) - 1
+            $.get('{% url "shopperaddgoods" %}', {gdnum: gdnum, gid: gid}, function(data){
+                if(data == '1'){
+                    $('#J_MiniCartNum').text(parseInt($('#J_MiniCartNum').text())-1)
+                    $('#myshoppernum').text(parseInt($('#myshoppernum').text())-1)
+                    $thispir.text(parseFloat(pri)-parseFloat(onepri)+'.0')
+
+                    if(chec.attr('checked')){
+                        countnum.text(parseInt(countnum.text())-1)
+                        countpri.text(parseInt(countpri.text())-parseInt(onepri))
+                    }
+                }else{
+                    alert('修改数量失败！')
+                }
+            });
+        };
+    });
+    // 删除ajax
+    $('.delonedata').click(function(){
+        var gid = $(this).attr('gid');
+        var $this = $(this).parents('ul')
+
+        // checkbox
+        var chec = $(this).parents('ul').find('.J_CheckBox')
+        // 已选总商品数
+        var countnum = $('#J_SelectedItemsCount');
+        // 总合计
+        var countpri = $('#J_Total');
+        $.get('{% url "delonedata" %}', {gid: gid}, function(data){
+            if(data == '1'){
+                alert('删除成功！')
+                $this.remove()
+                if(chec.attr('checked')){
+                    countnum.text(parseInt(countnum.text())-parseInt($this.find('.J_Itemnum').val()))
+                    countpri.text(parseFloat(countpri.text())-parseFloat($this.find('.J_ItemSum').text()))
+                }
+                $('#J_MiniCartNum').text(parseInt($('#J_MiniCartNum').text())-parseInt($this.find('.J_Itemnum').val()))
+                $('#myshoppernum').text(parseInt($('#myshoppernum').text())-parseInt($this.find('.J_Itemnum').val()))
+            }else{
+                alert('删除失败！')
+            }
+        })
+        // return false
+    });
+</script>
+{% endblock %}

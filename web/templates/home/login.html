@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>登录</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+        <link rel="stylesheet" href="/static/home/AmazeUI-2.4.2/assets/css/amazeui.css" />
+        <link href="/static/home/css/dlstyle.css" rel="stylesheet" type="text/css">
+        <script src="/static/myjs/jquery-1.8.3.min.js"></script>
+    </head>
+
+    <body>
+
+        <div class="login-boxtitle">
+            <a href="home.html"><img alt="logo" src="/static/home/images/logobig.png" /></a>
+        </div>
+
+        <div class="login-banner">
+            <div class="login-main">
+                <div class="login-banner-bg"><span></span><img src="/static/home/images/big.jpg" /></div>
+                <div class="login-box">
+                    <div style="height: 50px"></div>
+                    <h3 class="title">登录商城</h3>
+                    <div class="clear"></div>
+                    <div class="login-form">
+                        <form method="post" data-am-validator>
+                            {% csrf_token %}
+                           <div class="user-name">
+                                <label for="user"><i class="am-icon-user"></i></label>
+                                
+                                <input {% if request.GET.name != None %} value="{{ request.GET.name }}" {% endif %} type="text" name="name" id="user" placeholder="邮箱/手机/用户名" required />
+                            </div>
+                            <div class="user-pass">
+                                <label for="password"><i class="am-icon-lock"></i></label>
+                                <input type="password" name="password" id="password" placeholder="请输入密码" required />
+                            </div>
+                            <div class="user-name" style="position: relative;">
+                                <label for="password"><i class="am-icon-code-fork"></i></label>
+                                <input type="text" name="vcode" placeholder="请输入验证码">
+                                <img style="position: absolute; top:10px; right: 10px" onclick="this.src='{% url 'adminvcode' %}?'+Math.random()" src="{% url 'adminvcode' %}" alt="验证码" required />
+                            </div>
+                            <div for="remember-me">
+                                <input style="height: 16px;width: 16px; display: inline-block;margin-left: 10px" name="check" value="a" id="remember-me" type="checkbox" />&nbsp;记住密码
+                            </div>
+                            <div class="am-cf">
+                                <input type="submit" name="" value="登 录" class="am-btn am-btn-primary am-btn-sm">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="login-links">
+                        <a style="position: absolute;top:15px;right:20px" href="#" class="zcnext am-fr am-btn-default">忘记密码</a>
+                        <a style="position: absolute;top:15px;right:300px" href="{% url 'register' %}" class="zcnext am-fr am-btn-default">注册</a>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="footer ">
+            <div class="footer-hd ">
+                <p>
+                    <a href="# ">恒望科技</a>
+                    <b>|</b>
+                    <a href="# ">商城首页</a>
+                    <b>|</b>
+                    <a href="# ">支付宝</a>
+                    <b>|</b>
+                    <a href="# ">物流</a>
+                </p>
+            </div>
+            <div class="footer-bd ">
+                <p>
+                    <a href="# ">关于恒望</a>
+                    <a href="# ">合作伙伴</a>
+                    <a href="# ">联系我们</a>
+                    <a href="# ">网站地图</a>
+                    <em>© 2015-2025 Hengwang.com 版权所有</em>
+                </p>
+            </div>
+        </div>
+    </body>
+
+    <script>
+        var sign = $('#remember').val()
+        $('#remember-me').click(function(){
+            sign++
+        })
+    </script>
+
+</html>
